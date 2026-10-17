@@ -1,10 +1,14 @@
 # sqlite-up
 
-[![npm version](https://badge.fury.io/js/sqlite-up.svg)](https://badge.fury.io/js/sqlite-up)
+[![npm version](https://badge.fury.io/js/@ku6epxboctuk%2Fsqlite-up.svg)](https://badge.fury.io/js/@ku6epxboctuk%2Fsqlite-up)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A lightweight SQLite migration system for Node.js and Bun, built with TypeScript. Manage your SQLite database schema changes with ease and confidence.
+
+> **Fork notice** — published as `@ku6epxboctuk/sqlite-up`, forked from [sandrinodimattia/sqlite-up](https://github.com/sandrinodimattia/sqlite-up) at 0.6.0.
+> Change vs upstream: migration modules are loaded through `pathToFileURL(...)`, so `migrationsDir` can be an absolute Windows path
+> (`C:\...`). Upstream fails with `ERR_UNSUPPORTED_ESM_URL_SCHEME` on Windows. No API changes.
 
 ## Features
 
@@ -21,11 +25,11 @@ A lightweight SQLite migration system for Node.js and Bun, built with TypeScript
 Requires Node.js 24+ or Bun.
 
 ```bash
-npm install sqlite-up
+npm install @ku6epxboctuk/sqlite-up
 # or
-yarn add sqlite-up
+yarn add @ku6epxboctuk/sqlite-up
 # or
-pnpm add sqlite-up
+pnpm add @ku6epxboctuk/sqlite-up
 ```
 
 ## Quick Start
@@ -39,7 +43,7 @@ mkdir migrations
 2. Create your first migration file `migrations/001_create_users.ts`:
 
 ```typescript
-import type { SqliteDatabase } from 'sqlite-up';
+import type { SqliteDatabase } from '@ku6epxboctuk/sqlite-up';
 
 export const up = async (db: SqliteDatabase): Promise<void> => {
   await db.exec(`
@@ -61,7 +65,7 @@ export const down = async (db: SqliteDatabase): Promise<void> => {
 
 ```typescript
 import { DatabaseSync } from 'node:sqlite';
-import { Migrator } from 'sqlite-up';
+import { Migrator } from '@ku6epxboctuk/sqlite-up';
 
 async function main() {
   const db = new DatabaseSync('myapp.db');
@@ -89,7 +93,7 @@ The same migrator accepts Bun's synchronous `bun:sqlite` database:
 
 ```typescript
 import { Database } from 'bun:sqlite';
-import { Migrator } from 'sqlite-up';
+import { Migrator } from '@ku6epxboctuk/sqlite-up';
 
 const db = new Database('myapp.db', { create: true });
 const migrator = new Migrator({
@@ -104,7 +108,7 @@ It also accepts Bun's Promise-based `SQL` SQLite client:
 
 ```typescript
 import { SQL } from 'bun';
-import { Migrator } from 'sqlite-up';
+import { Migrator } from '@ku6epxboctuk/sqlite-up';
 
 const sql = new SQL('sqlite://myapp.db');
 const migrator = new Migrator({
@@ -119,11 +123,11 @@ When using Bun `SQL`, write migration files as `async` functions and `await` dat
 
 ### better-sqlite3
 
-If your project already uses `better-sqlite3`, pass its database instance directly. `sqlite-up` does not install it or require it as a peer dependency, so install `better-sqlite3` in your application if you use this provider.
+If your project already uses `better-sqlite3`, pass its database instance directly. `@ku6epxboctuk/sqlite-up` does not install it or require it as a peer dependency, so install `better-sqlite3` in your application if you use this provider.
 
 ```typescript
 import Database from 'better-sqlite3';
-import { Migrator } from 'sqlite-up';
+import { Migrator } from '@ku6epxboctuk/sqlite-up';
 
 const db = new Database('myapp.db');
 const migrator = new Migrator({
@@ -249,7 +253,7 @@ await migrator.apply();
 All pending migrations in one `apply()` call run in a single transaction. If any part of a migration fails, the entire batch is rolled back:
 
 ```typescript
-import type { SqliteDatabase } from 'sqlite-up';
+import type { SqliteDatabase } from '@ku6epxboctuk/sqlite-up';
 
 export const up = async (db: SqliteDatabase): Promise<void> => {
   // Both operations will be in the same transaction
@@ -261,14 +265,14 @@ export const up = async (db: SqliteDatabase): Promise<void> => {
 };
 ```
 
-For synchronous SQLite clients such as Node `DatabaseSync`, Bun `Database`, `better-sqlite3`, and compatible `exec`/`prepare` clients, `sqlite-up` uses explicit `BEGIN IMMEDIATE` transactions so async migration functions are still awaited before commit or rollback. For Bun `SQL`, `sqlite-up` uses Bun SQL's native async transaction support when available.
+For synchronous SQLite clients such as Node `DatabaseSync`, Bun `Database`, `better-sqlite3`, and compatible `exec`/`prepare` clients, `@ku6epxboctuk/sqlite-up` uses explicit `BEGIN IMMEDIATE` transactions so async migration functions are still awaited before commit or rollback. For Bun `SQL`, `@ku6epxboctuk/sqlite-up` uses Bun SQL's native async transaction support when available.
 
 ## Migration Files
 
 Migration files should be TypeScript or JavaScript files that export `up` and `down` functions:
 
 ```typescript
-import type { SqliteDatabase } from 'sqlite-up';
+import type { SqliteDatabase } from '@ku6epxboctuk/sqlite-up';
 
 export const up = async (db: SqliteDatabase): Promise<void> => {
   // Migration code here
@@ -290,7 +294,7 @@ A second argument can be provided to migration file functions in order to supply
 To enforce type correctness, type the `Migrator` and use `satisfies` in your migration files:
 
 ```typescript
-import type { SqliteDatabase, Migration } from 'sqlite-up';
+import type { SqliteDatabase, Migration } from '@ku6epxboctuk/sqlite-up';
 
 interface MyContext {
   foo: string;
@@ -309,7 +313,7 @@ export const down: Migration<MyContext>['down'] = async (db: SqliteDatabase, ctx
 
 ```typescript
 import { DatabaseSync } from 'node:sqlite';
-import { Migrator } from 'sqlite-up';
+import { Migrator } from '@ku6epxboctuk/sqlite-up';
 
 async function main() {
   const db = new DatabaseSync('myapp.db');
@@ -333,7 +337,7 @@ import {
   MigrationFileError, // Issues with migration files
   MigrationLockError, // Locking-related errors
   MigrationExecutionError, // Errors during migration execution
-} from 'sqlite-up';
+} from '@ku6epxboctuk/sqlite-up';
 
 const result = await migrator.apply();
 
@@ -355,7 +359,7 @@ The library provides specific error classes for different scenarios:
 
 ## Examples
 
-Check out the [examples directory](https://github.com/sandrinodimattia/sqlite-up/tree/main/examples) for complete working examples.
+Check out the [examples directory](https://github.com/Ku6epXBOCTuK/sqlite-up/tree/main/examples) for complete working examples.
 
 ## FAQ
 
@@ -399,7 +403,7 @@ register('ts-node/esm', pathToFileURL('./'));
 
 ### Why do I get `TypeError: Unknown file extension ".ts"` in Node.js?
 
-`sqlite-up` loads migrations with dynamic `import()`, so Node.js needs a loader that understands TypeScript migration files. Run your migration entry point with a TypeScript runtime such as `tsx`, use an ESM loader such as `ts-node/esm`, or compile migrations to JavaScript before running them with plain Node.js.
+`@ku6epxboctuk/sqlite-up` loads migrations with dynamic `import()`, so Node.js needs a loader that understands TypeScript migration files. Run your migration entry point with a TypeScript runtime such as `tsx`, use an ESM loader such as `ts-node/esm`, or compile migrations to JavaScript before running them with plain Node.js.
 
 ```bash
 pnpm exec tsx migrate.ts

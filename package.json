@@ -1,18 +1,21 @@
 {
-  "name": "sqlite-up",
+  "name": "@ku6epxboctuk/sqlite-up",
   "author": "Sandrino Di Mattia",
-  "version": "0.6.0",
-  "description": "A lightweight SQLite migration system for Node.js and Bun",
+  "contributors": [
+    "Ku6epXBOCTuK (https://github.com/Ku6epXBOCTuK)"
+  ],
+  "version": "0.6.1",
+  "description": "A lightweight SQLite migration system for Node.js and Bun (fork with Windows ESM path fix)",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sandrinodimattia/sqlite-up.git"
+    "url": "git+https://github.com/Ku6epXBOCTuK/sqlite-up.git"
   },
   "bugs": {
-    "url": "https://github.com/sandrinodimattia/sqlite-up/issues"
+    "url": "https://github.com/Ku6epXBOCTuK/sqlite-up/issues"
   },
-  "homepage": "https://github.com/sandrinodimattia/sqlite-up#readme",
+  "homepage": "https://github.com/Ku6epXBOCTuK/sqlite-up#readme",
   "engines": {
     "node": ">=24.0.0"
   },

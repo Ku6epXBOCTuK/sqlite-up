@@ -1,6 +1,7 @@
 import { EventEmitter } from 'node:events';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { MigrationError, MigrationExecutionError, MigrationFileError, MigrationLockError } from './errors.js';
 import { createSqliteProvider, type SqliteProvider } from './providers/index.js';
 import type {
@@ -152,8 +153,7 @@ export class Migrator<T = undefined> extends EventEmitter {
         };
 
         try {
-          // Dynamic import (ESM)
-          imported = await import(fullPath);
+          imported = await import(pathToFileURL(fullPath).href);
         } catch (err) {
           throw new MigrationFileError(`Error loading migration "${file}": ${String(err)}`, err as Error);
         }
